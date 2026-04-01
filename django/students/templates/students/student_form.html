@@ -1,0 +1,57 @@
+{% extends "students/base.html" %}
+
+{% block title %}{{ title }} - Student Management System{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header card-header-custom">
+            <h5 class="mb-0"><i class="fas fa-edit me-2"></i>{{ title }}</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="row">
+                    {% for field in form %}
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {% if field.field.widget.input_type == 'email' %}
+                                {{ field }}
+                            {% elif field.field.widget.input_type == 'number' %}
+                                {{ field }}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary btn-primary-custom" type="submit"><i class="fas fa-save me-2"></i>{{ button_label }}</button>
+                    <a class="btn btn-secondary" href="{% url 'student_list' %}"><i class="fas fa-times me-2"></i>Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <style>
+        .form-control, .form-select, textarea {
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 0.75rem;
+        }
+        .form-control:focus, .form-select:focus, textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+{% endblock %}
